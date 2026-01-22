@@ -112,7 +112,10 @@
             question: "Which color represents safety warning?",
             options: ["Green", "Blue", "Yellow", "White"],
             correct: 2
-        }
+            },question: "who is you uncle?"
+            options: ["Andulaziz", "Andulaziz", "Andulaziz", "Andulaziz",],
+            correct: 3
+        },
     ];
     // ===============================
 
