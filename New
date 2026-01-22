@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Saudi Aramco Knowledge Assessment</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f6f7;
+        margin: 0;
+        padding: 10px;
+    }
+
+    .container {
+        max-width: 520px;
+        margin: auto;
+        background: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        border-top: 6px solid #007a3d;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .header {
+        text-align: center;
+        color: #007a3d;
+        font-weight: bold;
+        margin-bottom: 15px;
+        font-size: 18px;
+    }
+
+    h2 {
+        font-size: 17px;
+        margin-bottom: 15px;
+        color: #333;
+    }
+
+    .option {
+        padding: 12px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    .option.correct {
+        background: #d4edda;
+        border-color: #28a745;
+    }
+
+    .option.wrong {
+        background: #f8d7da;
+        border-color: #dc3545;
+    }
+
+    button {
+        width: 100%;
+        padding: 14px;
+        margin-top: 15px;
+        font-size: 16px;
+        background: #007a3d;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    button:disabled {
+        background: #aaa;
+    }
+
+    .feedback {
+        margin-top: 12px;
+        font-weight: bold;
+    }
+
+    .pass {
+        color: #28a745;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    .fail {
+        color: #dc3545;
+        font-size: 20px;
+        font-weight: bold;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">Saudi Aramco Knowledge Assessment</div>
+
+    <h2 id="question"></h2>
+    <div id="options"></div>
+    <div id="feedback" class="feedback"></div>
+
+    <button id="nextBtn" onclick="nextQuestion()">Next</button>
+</div>
+
+<script>
+/* ========= QUESTIONS (EDIT HERE) ========= */
+const questions = [
+    {
+        question: "What is the capital of Saudi Arabia?",
+        options: ["Jeddah", "Riyadh", "Dammam", "Mecca"],
+        correct: 1
+    },
+    {
+        question: "Which color indicates a warning sign?",
+        options: ["Green", "Blue", "Yellow", "White"],
+        correct: 2
+    },
+    {
+        question: "What is the minimum passing score?",
+        options: ["60%", "70%", "80%", "90%"],
+        correct: 2
+    }
+];
+/* ======================================== */
+
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+/* Fisher–Yates Shuffle */
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+const questionEl = document.getElementById("question");
+const optionsEl = document.getElementById("options");
+const feedbackEl = document.getElementById("feedback");
+const nextBtn = document.getElementById("nextBtn");
+
+function loadQuestion() {
+    answered = false;
+    nextBtn.disabled = true;
+    feedbackEl.innerHTML = "";
+
+    const q = questions[currentQuestion];
+    questionEl.innerText = `Q${currentQuestion + 1}. ${q.question}`;
+    optionsEl.innerHTML = "";
+
+    let shuffledOptions = q.options.map((text, index) => ({
+        text,
+        index
+    }));
+
+    shuffleArray(shuffledOptions);
+
+    shuffledOptions.forEach(opt => {
+        const div = document.createElement("div");
+        div.className = "option";
+        div.innerText = opt.text;
+        div.onclick = () => selectOption(div, opt.index, q.correct);
+        optionsEl.appendChild(div);
+    });
+}
+
+function selectOption(div, selectedIndex, correctIndex) {
+    if (answered) return;
+    answered = true;
+
+    const options = document.querySelectorAll(".option");
+
+    options.forEach(opt => {
+        if (opt.innerText === questions[currentQuestion].options[correctIndex]) {
+            opt.classList.add("correct");
+        }
+    });
+
+    if (selectedIndex === correctIndex) {
+        feedbackEl.innerText = "Correct ✅";
+        score++;
+    } else {
+        div.classList.add("wrong");
+        feedbackEl.innerHTML =
+            `Wrong ❌<br>Correct Answer: <strong>${questions[currentQuestion].options[correctIndex]}</strong>`;
+    }
+
+    nextBtn.disabled = false;
+}
+
+function nextQuestion() {
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+        loadQuestion();
+    } else {
+        showResult();
+    }
+}
+
+function showResult() {
+    const percentage = Math.round((score / questions.length) * 100);
+    const pass = percentage >= 80;
+
+    document.querySelector(".container").innerHTML = `
+        <div class="header">Saudi Aramco Assessment Result</div>
+        <h2>Final Score</h2>
+        <p><strong>${score} / ${questions.length}</strong></p>
+        <p><strong>${percentage}%</strong></p>
+        <p class="${pass ? 'pass' : 'fail'}">
+            ${pass ? 'PASS ✅' : 'FAIL ❌'}
+        </p>
+        <p>Passing requirement: 80%</p>
+    `;
+}
+
+/* Shuffle questions ONCE before start */
+shuffleArray(questions);
+loadQuestion();
+</script>
+
+</body>
+</html>
