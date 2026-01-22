@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>MCQ Test</title>
+<title>Saudi Aramco Knowledge Assessment</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -19,7 +19,7 @@
         background: #ffffff;
         padding: 20px;
         border-radius: 10px;
-        border-top: 6px solid #007a3d; /* Aramco Green */
+        border-top: 6px solid #007a3d;
         box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     }
 
@@ -28,10 +28,11 @@
         color: #007a3d;
         font-weight: bold;
         margin-bottom: 15px;
+        font-size: 18px;
     }
 
     h2 {
-        font-size: 18px;
+        font-size: 17px;
         margin-bottom: 15px;
         color: #333;
     }
@@ -60,7 +61,7 @@
         margin-top: 15px;
         font-size: 16px;
         background: #007a3d;
-        color: #fff;
+        color: white;
         border: none;
         border-radius: 6px;
         cursor: pointer;
@@ -101,100 +102,120 @@
 </div>
 
 <script>
-    // ===== EDIT QUESTIONS HERE =====
-    const questions = [
-        {
-            question: "What is the capital of Saudi Arabia?",
-            options: ["Jeddah", "Riyadh", "Dammam", "Mecca"],
-            correct: 1
-        },
-        {
-            question: "Which color represents safety warning?",
-            options: ["Green", "Blue", "Yellow", "White"],
-            correct: 2
-            },question: "who is you uncle?"
-            options: ["Andulaziz", "Andulaziz", "Andulaziz", "Andulaziz",],
-            correct: 3
-        },
-    ];
-    // ===============================
-
-    let currentQuestion = 0;
-    let score = 0;
-    let answered = false;
-
-    const questionEl = document.getElementById("question");
-    const optionsEl = document.getElementById("options");
-    const feedbackEl = document.getElementById("feedback");
-    const nextBtn = document.getElementById("nextBtn");
-
-    function loadQuestion() {
-        answered = false;
-        nextBtn.disabled = true;
-        feedbackEl.innerHTML = "";
-
-        const q = questions[currentQuestion];
-        questionEl.innerText = `Q${currentQuestion + 1}. ${q.question}`;
-        optionsEl.innerHTML = "";
-
-        q.options.forEach((opt, i) => {
-            const div = document.createElement("div");
-            div.className = "option";
-            div.innerText = opt;
-            div.onclick = () => selectOption(div, i);
-            optionsEl.appendChild(div);
-        });
+/* ========= QUESTIONS (EDIT HERE) ========= */
+const questions = [
+    {
+        question: "What is the capital of Saudi Arabia?",
+        options: ["Jeddah", "Riyadh", "Dammam", "Mecca"],
+        correct: 1
+    },
+    {
+        question: "Which color indicates a warning sign?",
+        options: ["Green", "Blue", "Yellow", "White"],
+        correct: 2
+    },
+    {
+        question: "What is the minimum passing score?",
+        options: ["60%", "70%", "80%", "90%"],
+        correct: 2
     }
+];
+/* ======================================== */
 
-    function selectOption(div, index) {
-        if (answered) return;
-        answered = true;
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
 
-        const correctIndex = questions[currentQuestion].correct;
-        const options = document.querySelectorAll(".option");
+/* Fisher–Yates Shuffle */
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
 
-        options.forEach((opt, i) => {
-            if (i === correctIndex) opt.classList.add("correct");
-            if (i === index && i !== correctIndex) opt.classList.add("wrong");
-        });
+const questionEl = document.getElementById("question");
+const optionsEl = document.getElementById("options");
+const feedbackEl = document.getElementById("feedback");
+const nextBtn = document.getElementById("nextBtn");
 
-        if (index === correctIndex) {
-            feedbackEl.innerHTML = "Correct ✅";
-            score++;
-        } else {
-            feedbackEl.innerHTML =
-                `Wrong ❌<br>Correct Answer: <strong>${questions[currentQuestion].options[correctIndex]}</strong>`;
+function loadQuestion() {
+    answered = false;
+    nextBtn.disabled = true;
+    feedbackEl.innerHTML = "";
+
+    const q = questions[currentQuestion];
+    questionEl.innerText = `Q${currentQuestion + 1}. ${q.question}`;
+    optionsEl.innerHTML = "";
+
+    let shuffledOptions = q.options.map((text, index) => ({
+        text,
+        index
+    }));
+
+    shuffleArray(shuffledOptions);
+
+    shuffledOptions.forEach(opt => {
+        const div = document.createElement("div");
+        div.className = "option";
+        div.innerText = opt.text;
+        div.onclick = () => selectOption(div, opt.index, q.correct);
+        optionsEl.appendChild(div);
+    });
+}
+
+function selectOption(div, selectedIndex, correctIndex) {
+    if (answered) return;
+    answered = true;
+
+    const options = document.querySelectorAll(".option");
+
+    options.forEach(opt => {
+        if (opt.innerText === questions[currentQuestion].options[correctIndex]) {
+            opt.classList.add("correct");
         }
+    });
 
-        nextBtn.disabled = false;
+    if (selectedIndex === correctIndex) {
+        feedbackEl.innerText = "Correct ✅";
+        score++;
+    } else {
+        div.classList.add("wrong");
+        feedbackEl.innerHTML =
+            `Wrong ❌<br>Correct Answer: <strong>${questions[currentQuestion].options[correctIndex]}</strong>`;
     }
 
-    function nextQuestion() {
-        currentQuestion++;
-        if (currentQuestion < questions.length) {
-            loadQuestion();
-        } else {
-            showResult();
-        }
+    nextBtn.disabled = false;
+}
+
+function nextQuestion() {
+    currentQuestion++;
+    if (currentQuestion < questions.length) {
+        loadQuestion();
+    } else {
+        showResult();
     }
+}
 
-    function showResult() {
-        const percentage = Math.round((score / questions.length) * 100);
-        const pass = percentage >= 80;
+function showResult() {
+    const percentage = Math.round((score / questions.length) * 100);
+    const pass = percentage >= 80;
 
-        document.querySelector(".container").innerHTML = `
-            <div class="header">Saudi Aramco Assessment Result</div>
-            <h2>Final Score</h2>
-            <p><strong>${score} / ${questions.length}</strong></p>
-            <p><strong>${percentage}%</strong></p>
-            <p class="${pass ? 'pass' : 'fail'}">
-                ${pass ? 'PASS ✅' : 'FAIL ❌'}
-            </p>
-            <p>Passing requirement: 80%</p>
-        `;
-    }
+    document.querySelector(".container").innerHTML = `
+        <div class="header">Saudi Aramco Assessment Result</div>
+        <h2>Final Score</h2>
+        <p><strong>${score} / ${questions.length}</strong></p>
+        <p><strong>${percentage}%</strong></p>
+        <p class="${pass ? 'pass' : 'fail'}">
+            ${pass ? 'PASS ✅' : 'FAIL ❌'}
+        </p>
+        <p>Passing requirement: 80%</p>
+    `;
+}
 
-    loadQuestion();
+/* Shuffle questions ONCE before start */
+shuffleArray(questions);
+loadQuestion();
 </script>
 
 </body>
