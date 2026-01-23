@@ -1,123 +1,150 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Saudi Aramco Knowledge Assessment</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 
 <style>
-    :root {
-        --bg: #0f172a;
-        --card: #020617;
-        --text: #e5e7eb;
-        --border: #1e293b;
-        --green: #007a3d;
-        --correct: #14532d;
-        --wrong: #7f1d1d;
-    }
+/* ================= THEME ================= */
+:root {
+    --bg-dark: #020617;
+    --card-dark: #0f172a;
+    --text-dark: #e5e7eb;
+    --border-dark: #1e293b;
 
-    body.light {
-        --bg: #f4f6f7;
-        --card: #ffffff;
-        --text: #111827;
-        --border: #d1d5db;
-    }
+    --bg-light: #f4f6f7;
+    --card-light: #ffffff;
+    --text-light: #111827;
+    --border-light: #d1d5db;
 
-    body {
-        margin: 0;
-        padding: 8px;
-        background: var(--bg);
-        font-family: Arial, sans-serif;
-        color: var(--text);
-    }
+    --green: #007a3d;
+    --correct: #14532d;
+    --wrong: #7f1d1d;
+}
 
-    .container {
-        max-width: 380px;        /* iPhone-friendly */
-        margin: auto;
-        background: var(--card);
-        padding: 16px;
-        border-radius: 14px;
-        border-top: 5px solid var(--green);
-    }
+html[data-theme="dark"] {
+    background: var(--bg-dark);
+    color: var(--text-dark);
+}
 
-    .header {
-        text-align: center;
-        color: var(--green);
-        font-weight: bold;
-        font-size: 15px;
-        margin-bottom: 10px;
-    }
+html[data-theme="light"] {
+    background: var(--bg-light);
+    color: var(--text-light);
+}
 
-    h2 {
-        font-size: 16px;
-        line-height: 1.4;
-        margin-bottom: 12px;
-    }
+/* ================= BASE ================= */
+body {
+    margin: 0;
+    padding: env(safe-area-inset-top) env(safe-area-inset-right)
+             env(safe-area-inset-bottom) env(safe-area-inset-left);
+    font-family: Arial, sans-serif;
+}
 
-    .option {
-        padding: 14px;
-        margin: 10px 0;
-        border-radius: 10px;
-        border: 1px solid var(--border);
-        cursor: pointer;
-    }
+/* ================= CARD ================= */
+.container {
+    width: 100%;
+    max-width: 340px;   /* TRUE iPhone fit */
+    margin: 12px auto;
+    padding: 14px;
+    border-radius: 14px;
+    border-top: 5px solid var(--green);
+    background:
+        linear-gradient(
+            to bottom,
+            rgba(0,0,0,0.03),
+            rgba(0,0,0,0.03)
+        );
+}
 
-    .option.correct {
-        background: var(--correct);
-        border-color: #22c55e;
-    }
+html[data-theme="dark"] .container {
+    background: var(--card-dark);
+    border-color: var(--border-dark);
+}
 
-    .option.wrong {
-        background: var(--wrong);
-        border-color: #ef4444;
-    }
+html[data-theme="light"] .container {
+    background: var(--card-light);
+    border-color: var(--border-light);
+}
 
-    button {
-        width: 100%;
-        padding: 14px;
-        margin-top: 14px;
-        font-size: 15px;
-        background: var(--green);
-        color: white;
-        border: none;
-        border-radius: 10px;
-        cursor: pointer;
-    }
+/* ================= TEXT ================= */
+.header {
+    text-align: center;
+    color: var(--green);
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 10px;
+}
 
-    button:disabled {
-        opacity: 0.5;
-    }
+h2 {
+    font-size: 15px;
+    line-height: 1.4;
+}
 
-    .feedback {
-        margin-top: 10px;
-        font-weight: bold;
-    }
+/* ================= OPTIONS ================= */
+.option {
+    padding: 14px;
+    margin: 10px 0;
+    border-radius: 12px;
+    border: 1px solid;
+    cursor: pointer;
+}
 
-    .pass {
-        color: #22c55e;
-        font-size: 18px;
-        font-weight: bold;
-    }
+html[data-theme="dark"] .option {
+    border-color: var(--border-dark);
+}
 
-    .fail {
-        color: #ef4444;
-        font-size: 18px;
-        font-weight: bold;
-    }
+html[data-theme="light"] .option {
+    border-color: var(--border-light);
+}
 
-    .toggle {
-        text-align: right;
-        font-size: 13px;
-        margin-bottom: 8px;
-        cursor: pointer;
-        opacity: 0.8;
-    }
+.option.correct {
+    background: var(--correct);
+    border-color: #22c55e;
+}
+
+.option.wrong {
+    background: var(--wrong);
+    border-color: #ef4444;
+}
+
+/* ================= BUTTON ================= */
+button {
+    width: 100%;
+    padding: 14px;
+    font-size: 15px;
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    margin-top: 12px;
+}
+
+button:disabled {
+    opacity: 0.5;
+}
+
+/* ================= EXTRA ================= */
+.feedback {
+    margin-top: 8px;
+    font-weight: bold;
+}
+
+.toggle {
+    text-align: right;
+    font-size: 12px;
+    opacity: 0.7;
+    cursor: pointer;
+}
+.pass { color: #22c55e; font-weight: bold; }
+.fail { color: #ef4444; font-weight: bold; }
 </style>
 </head>
+
 <body>
 
 <div class="container">
-    <div class="toggle" onclick="toggleMode()">🌙 / ☀️</div>
+    <div class="toggle" onclick="toggleTheme()">🌙 Dark / ☀️ Light</div>
     <div class="header">Saudi Aramco Knowledge Assessment</div>
 
     <h2 id="question"></h2>
@@ -128,7 +155,7 @@
 </div>
 
 <script>
-/* ========= QUESTIONS ========= */
+/* ===== QUESTIONS ===== */
 const questions = [
     {
         question: "What is the capital of Saudi Arabia?",
@@ -139,103 +166,83 @@ const questions = [
         question: "Which color indicates a warning sign?",
         options: ["Green", "Blue", "Yellow", "White"],
         correct: 2
-    },
-    {
-        question: "Minimum passing score is?",
-        options: ["60%", "70%", "80%", "90%"],
-        correct: 2
     }
 ];
-/* ============================= */
 
-let currentQuestion = 0;
-let score = 0;
-let answered = false;
+let current = 0, score = 0, answered = false;
 
 /* Shuffle */
-function shuffleArray(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+
+/* Theme toggle */
+function toggleTheme(){
+    const html = document.documentElement;
+    html.setAttribute(
+        "data-theme",
+        html.getAttribute("data-theme") === "dark" ? "light" : "dark"
+    );
 }
 
-/* Dark / Light toggle */
-function toggleMode() {
-    document.body.classList.toggle("light");
-}
+/* Elements */
+const qEl = document.getElementById("question");
+const oEl = document.getElementById("options");
+const fEl = document.getElementById("feedback");
+const nBtn = document.getElementById("nextBtn");
 
-const questionEl = document.getElementById("question");
-const optionsEl = document.getElementById("options");
-const feedbackEl = document.getElementById("feedback");
-const nextBtn = document.getElementById("nextBtn");
-
-function loadQuestion() {
+/* Load */
+function load(){
     answered = false;
-    nextBtn.disabled = true;
-    feedbackEl.innerHTML = "";
+    nBtn.disabled = true;
+    fEl.innerHTML = "";
+    oEl.innerHTML = "";
 
-    const q = questions[currentQuestion];
-    questionEl.innerText = `Q${currentQuestion + 1}. ${q.question}`;
-    optionsEl.innerHTML = "";
+    const q = questions[current];
+    qEl.innerText = `Q${current+1}. ${q.question}`;
 
-    let opts = q.options.map((t, i) => ({ t, i }));
-    shuffleArray(opts);
+    let opts = q.options.map((t,i)=>({t,i}));
+    shuffle(opts);
 
-    opts.forEach(o => {
-        const div = document.createElement("div");
-        div.className = "option";
-        div.innerText = o.t;
-        div.onclick = () => selectOption(div, o.i, q.correct);
-        optionsEl.appendChild(div);
+    opts.forEach(o=>{
+        const d=document.createElement("div");
+        d.className="option";
+        d.innerText=o.t;
+        d.onclick=()=>select(d,o.i,q.correct);
+        oEl.appendChild(d);
     });
 }
 
-function selectOption(div, selected, correct) {
-    if (answered) return;
-    answered = true;
+function select(div,s,c){
+    if(answered) return;
+    answered=true;
 
-    document.querySelectorAll(".option").forEach(o => {
-        if (o.innerText === questions[currentQuestion].options[correct]) {
-            o.classList.add("correct");
-        }
+    document.querySelectorAll(".option").forEach(o=>{
+        if(o.innerText===questions[current].options[c]) o.classList.add("correct");
     });
 
-    if (selected === correct) {
-        score++;
-        feedbackEl.innerText = "Correct ✅";
-    } else {
-        div.classList.add("wrong");
-        feedbackEl.innerHTML =
-            `Wrong ❌<br>Correct answer: <strong>${questions[currentQuestion].options[correct]}</strong>`;
-    }
+    if(s===c){ score++; fEl.innerText="Correct ✅"; }
+    else{ div.classList.add("wrong"); fEl.innerHTML=`Wrong ❌<br>Correct: <b>${questions[current].options[c]}</b>`; }
 
-    nextBtn.disabled = false;
+    nBtn.disabled=false;
 }
 
-function nextQuestion() {
-    currentQuestion++;
-    currentQuestion < questions.length ? loadQuestion() : showResult();
+function nextQuestion(){
+    current++;
+    current<questions.length?load():result();
 }
 
-function showResult() {
-    const percent = Math.round((score / questions.length) * 100);
-    const pass = percent >= 80;
-
-    document.querySelector(".container").innerHTML = `
-        <div class="header">Assessment Result</div>
-        <p><strong>${score} / ${questions.length}</strong></p>
-        <p><strong>${percent}%</strong></p>
-        <p class="${pass ? "pass" : "fail"}">
-            ${pass ? "PASS ✅" : "FAIL ❌"}
-        </p>
-        <p>Passing score: 80%</p>
-    `;
+function result(){
+    const p=Math.round(score/questions.length*100);
+    document.querySelector(".container").innerHTML=`
+        <div class="header">Result</div>
+        <p>${score}/${questions.length}</p>
+        <p>${p}%</p>
+        <p class="${p>=80?'pass':'fail'}">${p>=80?'PASS':'FAIL'}</p>
+        <p>Passing score: 80%</p>`;
 }
 
 /* Start */
-shuffleArray(questions);
-loadQuestion();
+shuffle(questions);
+load();
 </script>
 
 </body>
